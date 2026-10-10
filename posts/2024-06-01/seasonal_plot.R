@@ -1,24 +1,24 @@
 
 library(nba.dataRub)
 library(tidyverse)
-library(here)
 library(patchwork)
 
 
 # data --------------------------------------------------------------------
 
-db_con <- nba.dataRub::dh_createCon("postgres")
+db_con <- dh_createCon("postgres")
 df <- dh_getQuery(db_con, "seasonal.sql") |> 
   filter(player_name == "Nikola Jokic")
 
 
 # Top Minutes Plot ------------------------------------------------------
 
+nudge <- 5
 plt_top <- ggplot(df, aes(x = season_id)) +
   geom_col(aes(y = gp, fill = "Played"), colour = "black", alpha = 0.65) +
   geom_col(aes(y = gs, fill = "Started"), colour = "black", alpha = 0.65) +
-  geom_text(aes(y = gp, label = gp), nudge_y = 3) +
-  geom_text(data = filter(df, gp != gs), aes(y = gs, label = gs), nudge_y = -3) +
+  geom_text(aes(y = gp, label = gp), nudge_y = nudge) +
+  geom_text(data = filter(df, gp != gs), aes(y = gs, label = gs), nudge_y = nudge * -1) +
   scale_fill_manual(NULL, values = c("Played"="azure", "Started"="green")) +
   theme_bw() +
   theme(axis.text.x = element_blank()) + 
@@ -28,9 +28,9 @@ plt_top <- ggplot(df, aes(x = season_id)) +
 # Bottom Games Plot -------------------------------------------------------
 
 plt_bottom <- ggplot(df, aes(x = season_id, y = min, group = player_name, label = min)) +
-  geom_path(colour = "dodgerblue") +
+  geom_path(colour = "red") +
   geom_point() +
-  geom_text(nudge_y = 50) +
+  geom_text(nudge_y = 80) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10, face = "bold")) +
   labs(title = "Total Minutes Per Season", x = NULL, y = "Minutes")
@@ -46,4 +46,3 @@ plt_seasonal <- wrap_elements(plt_top / plt_bottom) &
 # Cleanup -----------------------------------------------------------------
 
 rm(list = c("plt_top", "plt_bottom", "df", "db_con"))
-plt_seasonal

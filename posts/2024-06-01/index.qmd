@@ -1,0 +1,72 @@
+---
+title: "Nikola Jokic"
+author: "FRED"
+date: "2024-06-01"
+format:
+  html:
+    smooth-scroll: true
+    code-fold: false
+---
+
+In this analysis, I try to gain an understanding of how Nikola Jokic has developed as a player throughout his time in the NBA. Going from a rookie to Most Valuable Player (MVP), at what point in his career did things start to take shape for him? - When did the first signs of dominance we see on the court start appearing? And how dominant is he?
+
+Insight to these questions will provide clarity as to whether or not his appointment as the MVP is justified.
+
+
+![](nikola_spacy.jpg)
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
+```
+
+```{r}
+library(nba.dataRub)
+library(here)
+
+i_am("proj_anchor.pj")
+
+panelset_gen <- function(plt_grp){
+  purrr::iwalk(plt_grp, \(x, y) {
+    cat("##### ", str_to_upper(y), "\n")
+    print(x)
+    cat("\n\n")
+  })
+}
+
+```
+
+Firstly, how has Jokic been used throughout his tenure? - From plot <X>, Jokic played 80 games in the first year, starting 55 of them, and accrued a total of 1743 minutes across the season. In his fourth year, he played and started 80 games, jumping up to 2504 minutes. However, interestingly, season23 he plays and starts only 69 games.
+
+```{r}
+source(here("seasonal_plot.R"))
+plt_seasonal
+```
+
+I first cluster all NBA players throughout history, ranging from X to Y. Players with similar playing styles make up one cluster. I feel, to best answer the research questions, comparison between Jokic and other players should only take place between those playing in the same echelon. 
+
+::: panel-tabset
+```{r}
+#| results: "asis"
+#| fig-height: 4
+
+source(here("stat_vs_cohort.R"))
+panelset_gen(plt_jok_coh)
+
+```
+:::
+
+
+
+
+
+::: panel-tabset
+```{r}
+#| results: "asis"
+#| fig-height: 4
+
+source(here("trend_analysis.R"))
+panelset_gen(plt_jok_trend)
+
+```
+:::
+
