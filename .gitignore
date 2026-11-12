@@ -38,8 +38,11 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# Quarto blog stuff
-*blog/_site/
-*blog/_freeze
+# OS / editor files
+.DS_Store
+.ipynb_checkpoints/
 
+# Quarto output and caches
+/_site/
+/_freeze/
 /.quarto/
